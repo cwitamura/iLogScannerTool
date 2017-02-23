@@ -5,40 +5,57 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using System.Configuration;
+using System.Net.Mail;
 
 namespace iLogScannerTool
 {
     class Program
     {
-        static void Main(string[] args)
+        private　static void Main(string[] args)
         {
-            Process pro = new Process();
-                        
-            // コマンド名
-            pro.StartInfo.FileName = ConfigurationManager.AppSettings["CommondPath"];
-            var arguments = string.Format(@"mode={0} logtype={1} accesslog={2}\u_ex{3}.log outdir={4} reporttype={5} level={6}"
-                , ConfigurationManager.AppSettings["Mode"]
-                , ConfigurationManager.AppSettings["LogType"]
-                , ConfigurationManager.AppSettings["AccessLog"]
-                , DateTime.Now.AddDays(-1).ToString("yyMMdd") // 一日前のログを取得
-                , ConfigurationManager.AppSettings["OutDir"]
-                , ConfigurationManager.AppSettings["ReportType"]
-                , ConfigurationManager.AppSettings["Level"]);
-
-            // 引数
-            pro.StartInfo.Arguments = arguments;
-            // DOSプロンプトの黒い画面を非表示
-            pro.StartInfo.CreateNoWindow = true;
-            // プロセスを新しいウィンドウで起動するか否か
-            pro.StartInfo.UseShellExecute = false;
-            // 標準出力をリダイレクトして取得したい
-            pro.StartInfo.RedirectStandardOutput = true;
-            // 実行
-            pro.Start();
-
-            // 出力を取得する
-            var output = pro.StandardOutput.ReadToEnd();
+            try
+            {
             
+                Process pro = new Process();
+
+                // コマンド名
+                pro.StartInfo.FileName = ConfigurationManager.AppSettings["CommondPath"];
+                // 引数
+                var arguments = string.Format(@"mode={0} logtype={1} accesslog={2}\u_ex{3}.log outdir={4} reporttype={5} level={6}"
+                    , ConfigurationManager.AppSettings["Mode"]
+                    , ConfigurationManager.AppSettings["LogType"]
+                    , ConfigurationManager.AppSettings["AccessLog"]
+                    , DateTime.Now.AddDays(-1).ToString("yyMMdd") // 一日前のログを取得
+                    , ConfigurationManager.AppSettings["OutDir"]
+                    , ConfigurationManager.AppSettings["ReportType"]
+                    , ConfigurationManager.AppSettings["Level"]);
+                pro.StartInfo.Arguments = arguments;            
+                // 実行
+                pro.Start();
+                // メール送信
+                SendMail(ConfigurationManager.AppSettings["From"]
+                    , ConfigurationManager.AppSettings["To"]
+                    , ConfigurationManager.AppSettings["Subject"]
+                    , ConfigurationManager.AppSettings["body"]);
+            }
+            catch (Exception ex)
+            {
+                SendMail(ConfigurationManager.AppSettings["ErrorFrom"]
+                    , ConfigurationManager.AppSettings["ErrorTo"]
+                    , "Logエラー"
+                    , ex.StackTrace
+                    );
+            }
+    }
+
+        /// <summary>
+        /// メールを送信する
+        /// </summary>
+        private static void SendMail(string from, string to, string subject, string body)
+        {
+            SmtpClient smtpClient = new SmtpClient(ConfigurationManager.AppSettings["SMTPHost"]);
+            smtpClient.Send(from, to, subject, body);
+            smtpClient.Dispose();
         }
     }
 }
