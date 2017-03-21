@@ -20,22 +20,26 @@ namespace iLogScannerTool
 
                 // コマンド名
                 pro.StartInfo.FileName = ConfigurationManager.AppSettings["CommondPath"];
+
+                var acLogDir = ConfigurationManager.AppSettings["AccessLog"].Split(',');
+                var accesslogList = acLogDir.Select(a => string.Format(@"{0}\u_ex{1}.log", a, DateTime.Now.AddDays(-1).ToString("yyMMdd"))).ToList();
+
                 // 引数
-                var arguments = string.Format(@"mode={0} logtype={1} accesslog={2}\u_ex{3}.log outdir={4} reporttype={5} level={6}"
+                pro.StartInfo.Arguments = string.Format(@"mode={0} logtype={1} accesslog={2} outdir={4} reporttype={5} level={6}"
                     , ConfigurationManager.AppSettings["Mode"]
                     , ConfigurationManager.AppSettings["LogType"]
-                    , ConfigurationManager.AppSettings["AccessLog"]
+                    , string.Join(",", accesslogList)
                     , DateTime.Now.AddDays(-1).ToString("yyMMdd") // 一日前のログを取得
                     , ConfigurationManager.AppSettings["OutDir"]
                     , ConfigurationManager.AppSettings["ReportType"]
                     , ConfigurationManager.AppSettings["Level"]);
-                pro.StartInfo.Arguments = arguments;            
+
                 // 実行
                 pro.Start();
                 // メール送信
                 SendMail(ConfigurationManager.AppSettings["From"]
                     , ConfigurationManager.AppSettings["To"]
-                    , ConfigurationManager.AppSettings["Subject"]
+                    , string.Format(ConfigurationManager.AppSettings["Subject"], DateTime.Now.ToString("yyyy/MM/dd"))
                     , ConfigurationManager.AppSettings["body"]);
             }
             catch (Exception ex)
