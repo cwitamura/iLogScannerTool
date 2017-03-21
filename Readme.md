@@ -4,20 +4,20 @@
 正常終了した場合は、メールを通知することができます。
 
 - 初期設定
+
 App.Configに以下を設定します。
 
-	- コマンドパラメータ
 |Key|Value|説明|
 |:--|:--|:--|
-|Mode|gui / cui|下記URL参照|
-|LogType|apache / iis / iis_w3c / ssh / vsftpd / wu-ftpd|下記URL参照|
+|Mode|cui|下記URL参照|
+|LogType|apache|下記URL参照|
 |AccessLog|アクセスログファイル名※カンマ区切りで複数指定可|下記URL参照|
 |OutDir|レポートの出力先ディレクトリを指定|下記URL参照|
-|ReportType|html / text / xml / all|下記URL参照|
-|Level|standard / detail|下記URL参照|
-https://www.ipa.go.jp/security/vuln/iLogScanner/app/offline.html
+|ReportType|html|下記URL参照|
+|Level|standard|下記URL参照|
 
-	- 正常メールパラメータ
+メール系の設定
+
 |Key|Value|説明|
 |:--|:--|:--|
 |From|from@gmail.com|送信元アドレス|
