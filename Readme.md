@@ -16,6 +16,8 @@ App.Configに以下を設定します。
 |ReportType|html|下記URL参照|
 |Level|standard|下記URL参照|
 
+https://www.ipa.go.jp/security/vuln/iLogScanner/app/offline.html
+
 メール系の設定
 
 |Key|Value|説明|
