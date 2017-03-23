@@ -22,9 +22,9 @@ App.Configに以下を設定します。
 |:--|:--|:--|
 |From|from@gmail.com|送信元アドレス|
 |To|to@gmail.com|送信先アドレス|
-|Subject|ログを出力しました。|題名|
+|Subject|yy/mm/ddのログを出力しました。|題名|
 |body|ログを確認して下さい。|本文|
 |SMTPHost|192.168.1.1|ホスト名|
 |ErrorTo|errorto@gmail.com|送信元アドレス（エラー時）|
-|Errorfrom|errorto@gmail.com|送信先アドレス（エラー時）|
+|Errorfrom|errorfrom@gmail.com|送信先アドレス（エラー時）|
 
